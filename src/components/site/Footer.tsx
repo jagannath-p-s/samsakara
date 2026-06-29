@@ -1,49 +1,72 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { BrandMark } from "@/components/site/BrandMark";
-import { RippleOrnament } from "@/components/site/Ornaments";
+import { BrandWordmark } from "@/components/site/BrandWordmark";
 
 export function Footer() {
   const { t } = useTranslation();
-  const links = [
+
+  const explore = [
     { to: "/about", label: t("nav.about") },
     { to: "/programmes", label: t("nav.programmes") },
     { to: "/work-with-me", label: t("nav.work") },
     { to: "/contact", label: t("nav.contact") },
-    { to: "/work-with-me", label: t("nav.cta") },
   ] as const;
+
+  const legal = [
+    { to: "/privacy", label: t("legal.footerPrivacy") },
+    { to: "/terms", label: t("legal.footerTerms") },
+    { to: "/cookies", label: t("legal.footerCookies") },
+  ] as const;
+
   return (
-    <footer className="relative overflow-hidden bg-[color:var(--color-forest)] text-[color:var(--color-cream)]">
-      <RippleOrnament
-        className="ornament-cream pointer-events-none absolute -bottom-10 left-1/2 h-40 w-[120%] -translate-x-1/2 opacity-20"
-        strokeOpacity={0.6}
-      />
-      <div className="relative mx-auto grid max-w-6xl gap-12 px-6 py-16 md:grid-cols-2 lg:px-10">
-        <div className="max-w-md">
-          <div className="flex items-center gap-3">
-            <BrandMark size={48} tone="cream" />
-            <p className="font-serif text-3xl text-[color:var(--color-cream)]">Samskara Nutrition</p>
+    <footer className="site-footer">
+      <div className="site-footer-main mx-auto max-w-6xl px-5 py-14 sm:px-6 lg:px-10 lg:py-16">
+        <div className="site-footer-grid">
+          <div className="site-footer-brand">
+            <Link to="/" className="inline-flex" aria-label="Samskara Nutrition — Home">
+              <BrandWordmark layout="stacked" markSize={48} tone="dark" align="start" markTone="gold" />
+            </Link>
+            <p className="site-footer-tagline">{t("footer.tagline")}</p>
+            <p className="site-footer-serving">{t("footer.serving")}</p>
+            <Link to="/work-with-me" hash="book" className="site-footer-cta">
+              {t("nav.cta")} <span aria-hidden>→</span>
+            </Link>
           </div>
-          <p className="mt-5 text-sm leading-relaxed text-[color:var(--color-cream)]/80">{t("footer.tagline")}</p>
-          <p className="mt-3 text-sm leading-relaxed text-[color:var(--color-cream)]/70">{t("footer.serving")}</p>
+
+          <nav className="site-footer-nav" aria-label="Footer">
+            <p className="site-footer-label">{t("footer.explore")}</p>
+            <ul className="site-footer-links">
+              {explore.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div className="site-footer-contact">
+            <p className="site-footer-label">{t("legal.footerLegal")}</p>
+            <ul className="site-footer-links">
+              {legal.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to}>{l.label}</Link>
+                </li>
+              ))}
+            </ul>
+            <p className="site-footer-label mt-6">{t("footer.contactLabel")}</p>
+            <a href="mailto:hello@samskaranutrition.com" className="site-footer-email">
+              hello@samskaranutrition.com
+            </a>
+            <p className="site-footer-note">{t("footer.onlineNote")}</p>
+          </div>
         </div>
-        <div>
-          <p className="eyebrow text-[color:var(--color-cream)]/70">{t("footer.explore")}</p>
-          <ul className="mt-5 space-y-3">
-            {links.map((l, i) => (
-              <li key={i}>
-                <Link to={l.to} className="text-sm text-[color:var(--color-cream)]/90 transition-colors hover:text-[color:var(--color-cream)]">
-                  {l.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <p className="site-footer-disclaimer">{t("legal.disclaimer")}</p>
       </div>
-      <div className="relative border-t border-[color:var(--color-cream)]/15">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-[color:var(--color-cream)]/60 md:flex-row md:justify-between lg:px-10">
+
+      <div className="site-footer-bar">
+        <div className="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-5 text-xs sm:px-6 sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <p>{t("footer.copyright")}</p>
-          <p>hello@samskaranutrition.com</p>
+          <p className="text-[color:var(--color-cream)]/50">samskaranutrition.com</p>
         </div>
       </div>
     </footer>

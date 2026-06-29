@@ -1,20 +1,24 @@
-import { useRouterState } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { ReadAloud } from "./ReadAloud";
+import { CookieConsent } from "./CookieConsent";
+import { RoutePrefetcher } from "./RoutePrefetcher";
+
+const ReadAloud = lazy(() =>
+  import("./ReadAloud").then((m) => ({ default: m.ReadAloud })),
+);
 
 export function SiteLayout({ children }: { children: ReactNode }) {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <RoutePrefetcher />
       <Header />
-      <main key={pathname} className="route-transition flex-1">
-        {children}
-      </main>
+      <main className="route-transition flex-1">{children}</main>
       <Footer />
-      <ReadAloud />
+      <CookieConsent />
+      <Suspense fallback={null}>
+        <ReadAloud />
+      </Suspense>
     </div>
   );
 }
-

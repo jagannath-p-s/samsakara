@@ -1,4 +1,4 @@
-import { useState, type ImgHTMLAttributes } from "react";
+import { useState, useEffect, type ImgHTMLAttributes } from "react";
 
 type Props = {
   src: string;
@@ -6,14 +6,38 @@ type Props = {
   placeholder?: string;
   alt: string;
   className?: string;
+  /** Skip load fade — use for hero / above-the-fold images */
+  instant?: boolean;
+  objectPosition?: string;
+  fit?: "cover" | "contain";
 } & Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "alt" | "placeholder" | "className">;
 
-/** Image with gentle fade-in. No blur: a soft cream tint is shown until load. */
-export function BlurImage({ src, placeholder, alt, className = "", ...rest }: Props) {
-  const [loaded, setLoaded] = useState(false);
+/** Image with optional gentle fade-in when a placeholder is used. */
+export function BlurImage({
+  src,
+  placeholder,
+  alt,
+  className = "",
+  instant = false,
+  objectPosition,
+  fit = "cover",
+  style,
+  ...rest
+}: Props) {
+  const [loaded, setLoaded] = useState(instant);
   const usePh = placeholder && placeholder !== src;
+  const imgStyle = {
+    objectPosition,
+    objectFit: fit,
+    ...style,
+  };
+
+  useEffect(() => {
+    setLoaded(instant);
+  }, [src, instant]);
+
   return (
-    <span className={"blur-img-wrap " + className}>
+    <span className={"blur-img-wrap" + (instant ? " is-instant" : "") + (className ? " " + className : "")}>
       {usePh && (
         <img
           src={placeholder}
@@ -30,7 +54,11 @@ export function BlurImage({ src, placeholder, alt, className = "", ...rest }: Pr
         loading={rest.loading ?? "lazy"}
         decoding="async"
         onLoad={() => setLoaded(true)}
-        className={"blur-img-full" + (loaded ? " is-loaded" : "")}
+        ref={(node) => {
+          if (node?.complete && node.naturalWidth > 0) setLoaded(true);
+        }}
+        style={imgStyle}
+        className={"blur-img-full" + (loaded || instant ? " is-loaded" : "")}
       />
     </span>
   );

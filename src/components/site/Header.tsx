@@ -1,14 +1,16 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useTranslation } from "react-i18next";
-import { setLang, type Lang } from "@/lib/i18n";
+import { BrandWordmark } from "@/components/site/BrandWordmark";
+import { LangToggle } from "@/components/site/LangToggle";
 import { tap } from "@/lib/haptics";
-import { BrandMark } from "@/components/site/BrandMark";
 
 export function Header() {
   const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const nav = [
@@ -19,29 +21,60 @@ export function Header() {
     { to: "/contact", label: t("nav.contact") },
   ];
 
+  const isActive = (to: string) =>
+    to === "/" ? pathname === "/" : pathname === to || pathname.startsWith(`${to}/`);
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    setMounted(true);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => {
+    let raf = 0;
+    let last = false;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        const next = window.scrollY > 60;
+        if (next !== last) {
+          last = next;
+          setScrolled(next);
+        }
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   const navRef = useRef<HTMLDivElement>(null);
   const [indicator, setIndicator] = useState({ left: 0, width: 0, visible: false });
   const recalcIndicator = () => {
-    const nav = navRef.current;
-    if (!nav) return;
-    const active = nav.querySelector<HTMLElement>("a[data-status='active']") ??
-      nav.querySelector<HTMLElement>("a[data-active='true']");
-    if (!active) { setIndicator((p) => ({ ...p, visible: false })); return; }
-    const navRect = nav.getBoundingClientRect();
+    const navEl = navRef.current;
+    if (!navEl) return;
+    const active =
+      navEl.querySelector<HTMLElement>("a[data-status='active']") ??
+      navEl.querySelector<HTMLElement>("a[data-active='true']");
+    if (!active) {
+      setIndicator((p) => ({ ...p, visible: false }));
+      return;
+    }
+    const navRect = navEl.getBoundingClientRect();
     const r = active.getBoundingClientRect();
     setIndicator({ left: r.left - navRect.left, width: r.width, visible: true });
   };
@@ -52,20 +85,86 @@ export function Header() {
     return () => window.removeEventListener("resize", r);
   }, [pathname, i18n.language]);
 
-  const switchLang = (lng: Lang) => { setLang(lng); tap(6); };
+  const mobileMenu =
+    mounted && open ? (
+      <div
+        className="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t("nav.menu")}
+      >
+        <div className="mobile-menu-grid" aria-hidden />
+        <div className="mobile-menu-bar">
+          <BrandWordmark markSize={36} tone="light" />
+          <button
+            type="button"
+            className="menu-btn is-active"
+            aria-label={t("nav.close")}
+            onClick={() => {
+              setOpen(false);
+              tap(6);
+            }}
+          >
+            <span className="menu-icon is-open" aria-hidden>
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+
+        <nav className="mobile-menu-nav" aria-label="Mobile">
+          {nav.map((item, i) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              preload="intent"
+              onClick={() => setOpen(false)}
+              className={"mobile-menu-row" + (isActive(item.to) ? " is-active" : "")}
+              style={{ ["--stagger" as string]: `${60 + i * 40}ms` }}
+            >
+              <span className="mobile-menu-index">{String(i + 1).padStart(2, "0")}</span>
+              <span className="mobile-menu-label">{item.label}</span>
+              <span className="mobile-menu-arrow" aria-hidden>
+                →
+              </span>
+            </Link>
+          ))}
+        </nav>
+
+        <div className="mobile-menu-cta-wrap">
+          <Link
+            to="/work-with-me"
+            hash="book"
+            preload="intent"
+            onClick={() => {
+              setOpen(false);
+              tap(8);
+            }}
+            className="mobile-menu-cta"
+            style={{ ["--stagger" as string]: `${60 + nav.length * 40}ms` }}
+          >
+            <span className="mobile-menu-cta-label">{t("nav.cta")}</span>
+            <span className="mobile-menu-arrow" aria-hidden>
+              →
+            </span>
+          </Link>
+        </div>
+
+        <div className="mobile-menu-footer">
+          <LangToggle onDark compact />
+          <a href="mailto:hello@samskaranutrition.com" className="mobile-menu-email">
+            hello@samskaranutrition.com
+          </a>
+        </div>
+      </div>
+    ) : null;
 
   return (
     <>
       <header className={"site-header" + (scrolled ? " is-scrolled" : "")}>
         <div className="header-inner mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-10">
-          <Link to="/" className="flex items-center gap-3" aria-label="Samskara Nutrition — Home">
-            <BrandMark size={scrolled ? 36 : 44} className="transition-all duration-300" />
-            <span className="flex flex-col leading-tight">
-              <span className="font-serif text-xl text-[color:var(--color-forest)] md:text-2xl">Samskara</span>
-              <span className="text-[0.6rem] uppercase tracking-[0.3em] text-[color:var(--color-terracotta)]">
-                Nutrition
-              </span>
-            </span>
+          <Link to="/" className="flex items-center" aria-label="Samskara Nutrition — Home">
+            <BrandWordmark markSize={scrolled ? 36 : 44} tone="light" />
           </Link>
 
           <nav className="hidden lg:block" aria-label="Primary">
@@ -74,12 +173,19 @@ export function Header() {
                 <Link
                   key={item.to}
                   to={item.to}
+                  preload="intent"
                   activeOptions={{ exact: item.to === "/" }}
                   className="text-sm text-[color:var(--color-forest)] transition-colors hover:text-[color:var(--color-terracotta)]"
-                  activeProps={{ className: "text-[color:var(--color-terracotta)]", "data-active": "true" } as any}
+                  activeProps={
+                    {
+                      className: "text-[color:var(--color-terracotta)]",
+                      "data-active": "true",
+                    } as any
+                  }
                   onMouseEnter={(e) => {
-                    const nav = navRef.current; if (!nav) return;
-                    const navRect = nav.getBoundingClientRect();
+                    const navEl = navRef.current;
+                    if (!navEl) return;
+                    const navRect = navEl.getBoundingClientRect();
                     const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
                     setIndicator({ left: r.left - navRect.left, width: r.width, visible: true });
                   }}
@@ -101,23 +207,33 @@ export function Header() {
           </nav>
 
           <div className="hidden items-center gap-5 lg:flex">
-            <LangPill current={i18n.language} onChange={switchLang} />
-            <Link to="/work-with-me" className="btn-primary text-xs" onClick={() => tap(8)}>
+            <LangToggle />
+            <Link
+              to="/work-with-me"
+              hash="book"
+              preload="intent"
+              className="btn-primary text-xs"
+              onClick={() => tap(8)}
+            >
               {t("nav.cta")} <span className="cta-arrow ml-2">→</span>
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 lg:hidden">
-            <LangPill current={i18n.language} onChange={switchLang} compact />
+          <div className="header-mobile-actions">
+            <LangToggle compact />
             <button
               type="button"
-              className="menu-btn"
+              className={"menu-btn" + (open ? " is-active" : "")}
               aria-label={open ? t("nav.close") : t("nav.menu")}
               aria-expanded={open}
-              onClick={() => { setOpen((o) => !o); tap(6); }}
+              onClick={() => {
+                setOpen((o) => !o);
+                tap(6);
+              }}
             >
               <span className={"menu-icon" + (open ? " is-open" : "")} aria-hidden>
-                <span /><span />
+                <span />
+                <span />
               </span>
             </button>
           </div>
@@ -126,90 +242,7 @@ export function Header() {
 
       <div aria-hidden className="h-[76px]" />
 
-      {open && (
-        <div className="mobile-menu lg:hidden" role="dialog" aria-modal="true" aria-label={t("nav.menu")}>
-          <div className="flex items-center justify-between px-6 py-5">
-            <span className="flex items-center gap-3">
-              <BrandMark size={36} tone="cream" />
-              <span className="font-serif text-xl text-[color:var(--color-cream)]">Samskara</span>
-            </span>
-            <button
-              type="button"
-              className="menu-btn menu-btn-dark"
-              aria-label={t("nav.close")}
-              onClick={() => { setOpen(false); tap(6); }}
-            >
-              <span className="menu-icon is-open" aria-hidden><span /><span /></span>
-            </button>
-          </div>
-          <nav className="flex flex-1 flex-col justify-center gap-6 px-8" aria-label="Mobile">
-            {nav.map((item, i) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => setOpen(false)}
-                className="mobile-menu-link"
-                style={{ ["--stagger" as any]: `${80 + i * 55}ms` }}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              to="/work-with-me"
-              onClick={() => { setOpen(false); tap(8); }}
-              className="mobile-menu-link"
-              style={{ ["--stagger" as any]: `${80 + nav.length * 55}ms`, color: "var(--color-terracotta)" }}
-            >
-              {t("nav.cta")} <span className="cta-arrow ml-2">→</span>
-            </Link>
-          </nav>
-          <div
-            className="border-t border-[color:var(--color-cream)]/15 px-8 py-6 text-sm text-[color:var(--color-cream)]/80"
-            style={{ ["--stagger" as any]: `${80 + (nav.length + 1) * 55}ms`, opacity: 0, animation: "samskara-reveal 520ms cubic-bezier(.2,.7,.2,1) both", animationDelay: `${80 + (nav.length + 1) * 55}ms` }}
-          >
-            <div className="flex items-center justify-between">
-              <LangPill current={i18n.language} onChange={switchLang} dark />
-              <a href="mailto:hello@samskaranutrition.com" className="underline-offset-4 hover:underline">
-                hello@samskaranutrition.com
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
+      {mounted && mobileMenu ? createPortal(mobileMenu, document.body) : null}
     </>
-  );
-}
-
-function LangPill({
-  current,
-  onChange,
-  dark = false,
-  compact = false,
-}: { current: string; onChange: (l: Lang) => void; dark?: boolean; compact?: boolean }) {
-  const active: Lang = (current ?? "en").startsWith("fr") ? "fr" : "en";
-  return (
-    <div
-      role="group"
-      aria-label="Language"
-      className={"lang-pill" + (dark ? " is-dark" : "") + (compact ? " is-compact" : "")}
-    >
-      <span className="lang-pill-thumb" data-pos={active} aria-hidden />
-      <button
-        type="button"
-        onClick={() => onChange("en")}
-        aria-pressed={active === "en"}
-        className={"lang-pill-opt" + (active === "en" ? " is-active" : "")}
-      >
-        EN
-      </button>
-      <button
-        type="button"
-        onClick={() => onChange("fr")}
-        aria-pressed={active === "fr"}
-        className={"lang-pill-opt" + (active === "fr" ? " is-active" : "")}
-      >
-        FR
-      </button>
-    </div>
   );
 }

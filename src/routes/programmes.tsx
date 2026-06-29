@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Sprout, GitMerge, Sparkles } from "lucide-react";
 import { SiteLayout } from "@/components/site/Layout";
 import { ClosingCTA } from "@/components/site/ClosingCTA";
+import { ProgrammeIcon, PROGRAMME_ICON_ORDER } from "@/components/site/ProgrammeIcon";
 import { useReveal } from "@/hooks/useReveal";
 import { tap } from "@/lib/haptics";
-import { LeafDivider, RippleOrnament } from "@/components/site/Ornaments";
 import { absoluteUrl } from "@/lib/site";
-
-const programmeIcons = [Sprout, Sparkles, GitMerge];
 
 export const Route = createFileRoute("/programmes")({
   head: () => ({
@@ -45,7 +42,7 @@ function ProgrammesPage() {
           <div ref={gridRef} className="reveal grid gap-10 md:grid-cols-3">
             {p.items.map((it: any, i: number) => {
               const featured = i === 1;
-              const Icon = programmeIcons[i] ?? Sparkles;
+              const iconVariant = PROGRAMME_ICON_ORDER[i] ?? "signature";
               return (
                 <article
                   key={it.name}
@@ -58,20 +55,17 @@ function ProgrammesPage() {
                         " bg-background p-8 border border-[color:var(--color-gold)]/40 md:p-12")
                   }
                 >
-                  {featured && (
-                    <RippleOrnament className="ornament-gold pointer-events-none absolute -right-16 -top-16 h-40 w-60 opacity-30" />
-                  )}
                   <div className="flex items-center gap-4">
                     <span
                       aria-hidden
                       className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[color:var(--color-terracotta)]/40 bg-[color:var(--color-cream)] text-[color:var(--color-terracotta)]"
                     >
-                      <Icon size={22} strokeWidth={1.4} />
+                      <ProgrammeIcon variant={iconVariant} size={22} />
                     </span>
                     <p className="eyebrow !mt-0">{it.tag}</p>
                   </div>
                   <h2 className={"mt-6 font-serif text-[color:var(--color-forest)] " + (featured ? "text-4xl md:text-[2.5rem]" : "text-3xl")}>{it.name}</h2>
-                  <LeafDivider className="ornament-terracotta mt-4 h-3 w-32" />
+                  <div className="mt-4 h-px w-10 bg-[color:var(--color-gold)]/45" aria-hidden />
                   <p className="mt-5 text-[color:var(--color-ink)]/80">{it.intro}</p>
                   <ul className="mt-8 space-y-3 text-sm text-[color:var(--color-ink)]/85">
                     {it.includes.map((item: string) => (

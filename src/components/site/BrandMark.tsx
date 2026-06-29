@@ -1,23 +1,36 @@
 type Props = {
   size?: number;
   className?: string;
-  tone?: "forest" | "cream";
+  tone?: "forest" | "cream" | "gold";
 };
 
-/** Tight-cropped Samskara monogram. Image is wider than tall (~1.38:1). */
+const ICON_SRC = "/images/icon-base.png";
+
+const TONE_COLOR: Record<NonNullable<Props["tone"]>, string> = {
+  forest: "var(--color-forest)",
+  cream: "var(--color-cream)",
+  gold: "var(--color-gold)",
+};
+
+/** Icon via CSS mask — no white/filter box on dark backgrounds */
 export function BrandMark({ size = 40, className = "", tone = "forest" }: Props) {
-  const filter =
-    tone === "cream"
-      ? "brightness(0) saturate(100%) invert(96%) sepia(7%) saturate(469%) hue-rotate(354deg) brightness(101%) contrast(94%)"
-      : undefined;
   return (
-    <img
-      src="/images/samskara-logo.png"
-      alt=""
+    <span
       aria-hidden="true"
-      height={size}
-      className={className}
-      style={{ height: size, width: "auto", objectFit: "contain", display: "block", filter }}
+      className={"brand-mark" + (className ? " " + className : "")}
+      style={{
+        width: size,
+        height: size,
+        backgroundColor: TONE_COLOR[tone],
+        WebkitMaskImage: `url(${ICON_SRC})`,
+        WebkitMaskSize: "contain",
+        WebkitMaskRepeat: "no-repeat",
+        WebkitMaskPosition: "center",
+        maskImage: `url(${ICON_SRC})`,
+        maskSize: "contain",
+        maskRepeat: "no-repeat",
+        maskPosition: "center",
+      }}
     />
   );
 }

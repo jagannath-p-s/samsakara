@@ -7,11 +7,17 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { I18nextProvider } from "react-i18next";
 
+import "../styles.css";
 import appCss from "../styles.css?url";
-import i18n from "../lib/i18n";
+import i18n, { normalizeLang } from "../lib/i18n";
 import { absoluteUrl, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "../lib/site";
 import { photos } from "../lib/photos";
+
+function stylesheetHref(): string {
+  return import.meta.env.DEV ? "/src/styles.css" : appCss;
+}
 
 function NotFoundComponent() {
   return (
@@ -83,19 +89,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: absoluteUrl(photos.portrait.src) },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
+      { rel: "stylesheet", href: stylesheetHref() },
+      { rel: "stylesheet", href: "/fonts/fonts.css" },
+      { rel: "preload", href: "/fonts/cormorant-garamond-400.ttf", as: "font", type: "font/ttf", crossOrigin: "anonymous" },
+      { rel: "preload", href: "/fonts/inter-400.ttf", as: "font", type: "font/ttf", crossOrigin: "anonymous" },
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", type: "image/png", href: "/favicon-32x32.png", sizes: "32x32" },
       { rel: "icon", type: "image/png", href: "/favicon-16x16.png", sizes: "16x16" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "canonical", href: SITE_URL },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "preconnect", href: "https://images.pexels.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap",
-      },
       { rel: "alternate", hrefLang: "en", href: absoluteUrl("/") },
       { rel: "alternate", hrefLang: "fr", href: absoluteUrl("/?lang=fr") },
       { rel: "alternate", hrefLang: "x-default", href: absoluteUrl("/") },
@@ -134,7 +136,9 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
+        <I18nextProvider i18n={i18n}>
+          {children}
+        </I18nextProvider>
         <Scripts />
       </body>
     </html>
@@ -144,15 +148,9 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => {
-    import("@/lib/i18n").then(({ readStoredLang, setLang }) => {
-      const stored = readStoredLang();
-      if (stored && stored !== i18n.language) setLang(stored);
-    });
-    const onChange = (l: string) => {
-      document.documentElement.lang = l.startsWith("fr") ? "fr-FR" : "en-GB";
-    };
-    i18n.on("languageChanged", onChange);
-    return () => { i18n.off("languageChanged", onChange); };
+    document.documentElement.classList.add("js");
+    const lng = normalizeLang(i18n.resolvedLanguage ?? i18n.language);
+    document.documentElement.lang = lng === "fr" ? "fr-FR" : "en-GB";
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
