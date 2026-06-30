@@ -57,7 +57,7 @@ if (!i18n.isInitialized) {
         caches: ["samskaraStorage"],
       },
       interpolation: { escapeValue: false },
-      returnObjects: true,
+      returnObjects: false,
       react: {
         useSuspense: false,
         bindI18n: "languageChanged loaded",
