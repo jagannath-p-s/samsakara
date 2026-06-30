@@ -94,10 +94,10 @@ export function Header() {
         aria-label={t("nav.menu")}
       >
         <div className="mobile-menu-bar">
-          <BrandWordmark markSize={36} tone="dark" markTone="gold" />
+          <BrandWordmark markSize={36} tone="dark" markTone="cream" subtitleTone="muted" />
           <button
             type="button"
-            className="menu-btn is-active"
+            className="menu-btn menu-btn-dark is-active"
             aria-label={t("nav.close")}
             onClick={() => {
               setOpen(false);
@@ -121,7 +121,6 @@ export function Header() {
               className={"mobile-menu-row" + (isActive(item.to) ? " is-active" : "")}
               style={{ ["--stagger" as string]: `${60 + i * 40}ms` }}
             >
-              <span className="mobile-menu-index">{String(i + 1).padStart(2, "0")}</span>
               <span className="mobile-menu-label">{item.label}</span>
               <span className="mobile-menu-arrow" aria-hidden>
                 →
@@ -132,8 +131,7 @@ export function Header() {
             className="mobile-menu-row mobile-menu-row--utility"
             style={{ ["--stagger" as string]: `${60 + nav.length * 40}ms` }}
           >
-            <span className="mobile-menu-index">{String(nav.length + 1).padStart(2, "0")}</span>
-            <span className="mobile-menu-label">{t("nav.language")}</span>
+            <span className="mobile-menu-label mobile-menu-label--quiet">{t("nav.language")}</span>
             <LangToggle onDark compact />
           </div>
           <a
@@ -141,7 +139,6 @@ export function Header() {
             className="mobile-menu-row mobile-menu-row--email"
             style={{ ["--stagger" as string]: `${60 + (nav.length + 1) * 40}ms` }}
           >
-            <span className="mobile-menu-index">{String(nav.length + 2).padStart(2, "0")}</span>
             <span className="mobile-menu-meta">
               <span className="mobile-menu-meta-title">{t("nav.email")}</span>
               <span className="mobile-menu-meta-value">hello@samskaranutrition.com</span>

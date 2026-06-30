@@ -7,6 +7,8 @@ type Props = {
   tone?: "light" | "dark";
   /** Icon colour on dark backgrounds — defaults to cream */
   markTone?: "forest" | "cream" | "gold";
+  /** Subtitle colour on dark backgrounds */
+  subtitleTone?: "terracotta" | "gold" | "muted";
   align?: "center" | "start";
   className?: string;
 };
@@ -20,6 +22,7 @@ export function BrandWordmark({
   markSize = 44,
   tone = "light",
   markTone,
+  subtitleTone,
   align = "center",
   className = "",
 }: Props) {
@@ -31,7 +34,11 @@ export function BrandWordmark({
       : "font-serif text-[color:var(--color-forest)]";
   const subtitleClass =
     tone === "dark"
-      ? "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-gold)]"
+      ? subtitleTone === "muted"
+        ? "text-[0.58rem] uppercase tracking-[0.34em] text-[color:color-mix(in_oklab,var(--color-cream)_48%,transparent)]"
+        : subtitleTone === "terracotta"
+          ? "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-terracotta)]"
+          : "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-gold)]"
       : "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-terracotta)]";
   const alignClass = align === "start" ? "items-start text-left" : "items-center text-center";
 
