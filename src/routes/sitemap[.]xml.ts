@@ -5,8 +5,9 @@ import { absoluteUrl } from "@/lib/site";
 const entries = [
   { path: "/", priority: "1.0", changefreq: "weekly" as const },
   { path: "/about", priority: "0.8", changefreq: "monthly" as const },
+  { path: "/approach", priority: "0.9", changefreq: "monthly" as const },
   { path: "/programmes", priority: "0.9", changefreq: "monthly" as const },
-  { path: "/work-with-me", priority: "0.9", changefreq: "monthly" as const },
+  { path: "/work-with-me", priority: "0.8", changefreq: "monthly" as const },
   { path: "/faq", priority: "0.8", changefreq: "monthly" as const },
   { path: "/contact", priority: "0.7", changefreq: "monthly" as const },
   { path: "/waitlist", priority: "0.7", changefreq: "monthly" as const },

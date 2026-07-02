@@ -1,17 +1,20 @@
 import type { Translations } from "./en";
+import { approachEn } from "./approach-en";
 import { faqFr } from "./faq-fr";
 import { legalFr } from "./legal-fr";
+import { programmesEn } from "./programmes-en";
 
 export const fr: Translations = {
   nav: {
     home: "Accueil",
     about: "À propos",
-    programmes: "Programmes",
-    work: "Collaborer",
+    approach: "L'approche",
+    programmes: "Travailler avec moi",
+    work: "Travailler avec moi",
     contact: "Contact",
     faq: "FAQ",
     email: "E-mail",
-    cta: "Appel découverte gratuit",
+    cta: "Trouver le bon chemin",
     menu: "Menu",
     close: "Fermer",
     language: "Langue",
@@ -21,17 +24,17 @@ export const fr: Translations = {
     serving: "J'accompagne des client·es à travers le Royaume-Uni et l'Europe, en ligne et à Londres.",
     explore: "Explorer",
     contactLabel: "Contact",
-    onlineNote: "En ligne · Consultations à Londres",
+    onlineNote: "En ligne · Royaume-Uni & Europe",
     copyright: "© 2026 Samskara Nutrition · Réalisé avec soin",
     clinicHeading: "Notre cabinet à Londres",
-    clinicHint: "Consultations en personne sur rendez-vous",
+    clinicHint: "",
     clinicDirections: "Ouvrir dans Google Maps",
   },
   closing: {
     eyebrow: "Une première conversation",
     title: "Vous avez du mal à décider ou à vous faire confiance ?",
     body: "Votre intestin a peut-être perdu sa voix. J'aide à restaurer le lien entre l'intestin et l'esprit, pour que la clarté revienne, l'énergie se stabilise et que vous vous sentiez à nouveau en accord.",
-    cta: "Réserver un appel découverte gratuit",
+    cta: "Trouver le bon chemin",
   },
   home: {
     eyebrow: "Là où la sagesse alimentaire traditionnelle rencontre la science moderne",
@@ -54,9 +57,9 @@ export const fr: Translations = {
     seeAll: "Voir tous les programmes",
     learnMore: "En savoir plus",
     programmes: [
-      { name: "Samskara — Mon parcours signature", tag: "Signature · 10 semaines", body: "Un chemin plus profond et plus personnel vers un changement durable. Un accompagnement complet sur dix semaines pour celles et ceux prêts à transformer réellement la façon dont ils se sentent." },
-      { name: "Clarté — Impressions durables", tag: "Première étape", body: "Une première étape ciblée pour celles et ceux qui cherchent clarté, orientation et une meilleure compréhension de ce dont leur corps a besoin — sans s'engager tout de suite dans un parcours plus long." },
-      { name: "Setu — Le pont", tag: "Le pont", body: "Un accompagnement structuré et concret pour consolider votre plan initial, restaurer l'équilibre et combler l'écart entre la prise de conscience et un progrès durable." },
+      { name: "Artha — Clarté", tag: "Clarté", body: "Une première étape ciblée pour comprendre ce que votre corps essaie de vous dire — avec votre Samskara Blueprint™ personnalisé." },
+      { name: "Setu — Connexion", tag: "Connexion", body: "Un pont entre la prise de conscience et la vie quotidienne — quatre semaines d'accompagnement pendant que votre Blueprint évolue." },
+      { name: "Samskara — Programme signature", tag: "Empreintes durables · 10 semaines", body: "Notre transformation signature sur dix semaines pour celles et ceux prêts à dépasser la restriction et restaurer l'équilibre digestif." },
     ],
     portraitAlt: "Portrait de Samantha, fondatrice de Samskara Nutrition",
   },
@@ -127,26 +130,15 @@ export const fr: Translations = {
       tagline: "Nourrir avec intention.",
       imageAlt: "Table méditerranéenne — les traditions alimentaires au cœur de Samskara",
     },
-    mailing: {
-      title: "Chaque choix laisse sa marque.",
-      body: "Choisissez de vous sentir aligné·e dans le parcours Samskara. Rejoignez notre liste de diffusion pour un soutien ancré sur la santé, les rythmes saisonniers et les recettes, ainsi que les actualités de la pratique.",
-      emailLabel: "Votre e-mail",
-      submit: "Rejoindre la liste",
-      submitting: "Inscription…",
-      successTitle: "Vous êtes inscrit·e.",
-      successBody: "Merci — attendez-vous à recevoir un soutien ancré, des rythmes saisonniers et des nouvelles de la pratique.",
-      privacyPrefix: "J'accepte la ",
-      privacyLink: "politique de confidentialité",
-      privacySuffix: " et consens à ce que Samskara Nutrition conserve mon e-mail pour les mises à jour de la liste.",
-      errorBody: "Une erreur s'est produite — écrivez à hello@samskaranutrition.com pour vous inscrire.",
-    },
     discoveryCta: {
-      eyebrow: "Le premier pas",
-      title: "Réserver un appel découverte gratuit",
-      body: "Une conversation détendue de quinze minutes pour explorer où vous en êtes, ce que vous espérez et si nous sommes faits pour travailler ensemble.",
-      cta: "Réserver un appel découverte gratuit",
+      eyebrow: "Trouver le bon chemin",
+      title: "Votre première conversation",
+      body: "Un appel découverte gratuit de 15 minutes — sans obligation, juste un échange réfléchi sur votre santé et la direction que vous souhaitez prendre.",
+      cta: "Trouver le bon chemin",
     },
   },
+  programmesPage: programmesEn,
+  approach: approachEn,
   programmes: {
     eyebrow: "Travailler ensemble",
     title: "Choisissez votre chemin",
@@ -217,7 +209,7 @@ export const fr: Translations = {
   clinic: {
     mapTitle: "Carte — Samskara Nutrition, 34a Thomas Rd, Londres",
     directions: "Ouvrir dans Google Maps",
-    visitHeading: "Nous rendre visite à Londres",
+    visitHeading: "Nous trouver à Londres",
   },
   payments: {
     eyebrow: "Réservation et paiement",

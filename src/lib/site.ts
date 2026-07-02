@@ -20,10 +20,22 @@ export const STRIPE_PAYMENT_URL =
 export const CALENDLY_PROGRAMME_URL =
   (import.meta.env.VITE_CALENDLY_PROGRAMME_URL as string | undefined)?.trim() || "";
 
-export function programmePaymentUrl(): string {
-  if (STRIPE_PAYMENT_URL) return STRIPE_PAYMENT_URL;
+const PROGRAMME_CALENDLY_URLS: Record<string, string | undefined> = {
+  artha: (import.meta.env.VITE_CALENDLY_ARTHA_URL as string | undefined)?.trim(),
+  setu: (import.meta.env.VITE_CALENDLY_SETU_URL as string | undefined)?.trim(),
+  samskara: (import.meta.env.VITE_CALENDLY_SAMSKARA_URL as string | undefined)?.trim(),
+};
+
+export function programmeBookingUrl(id: string): string {
+  const specific = PROGRAMME_CALENDLY_URLS[id];
+  if (specific) return calendlyBookingUrl(specific);
   if (CALENDLY_PROGRAMME_URL) return calendlyBookingUrl(CALENDLY_PROGRAMME_URL);
   return calendlyBookingUrl(CALENDLY_URL);
+}
+
+export function programmePaymentUrl(): string {
+  if (STRIPE_PAYMENT_URL) return STRIPE_PAYMENT_URL;
+  return programmeBookingUrl("samskara");
 }
 
 /** Inline widget URL — Sage Green brand palette */

@@ -25,12 +25,12 @@ export function AboutSamskaraMeaning() {
         <figure className="lg:col-span-5">
           <div className="samskara-meaning-photo overflow-hidden border border-[color:var(--color-gold)]/35 bg-[color:var(--color-cream)]">
             <BlurImage
-              src={photos.mediterranean.src}
+              src={photos.aboutSecondary.src}
               alt={copy.imageAlt}
               width={1200}
-              height={1200}
+              height={960}
               loading="lazy"
-              objectPosition={photos.mediterranean.objectPosition}
+              objectPosition={photos.aboutSecondary.objectPosition}
             />
           </div>
         </figure>
@@ -175,7 +175,7 @@ export function DiscoveryCallCTA({ eyebrowKey = "about.discoveryCta.eyebrow" }: 
           {t("about.discoveryCta.body")}
         </p>
         <Link
-          to="/work-with-me"
+          to="/programmes"
           hash="book"
           className="mt-8 inline-flex items-center justify-center bg-[color:var(--color-cream)] px-7 py-4 text-xs uppercase tracking-[0.18em] text-[color:var(--color-forest)] transition-colors hover:bg-[color:var(--color-terracotta)] hover:text-[color:var(--color-cream)]"
           style={{ borderRadius: 3 }}

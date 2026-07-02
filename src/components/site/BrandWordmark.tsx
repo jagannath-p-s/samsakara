@@ -7,57 +7,54 @@ type Props = {
   tone?: "light" | "dark";
   /** Icon colour on dark backgrounds — defaults to cream */
   markTone?: "forest" | "cream" | "gold";
-  /** Subtitle colour on dark backgrounds */
-  subtitleTone?: "terracotta" | "gold" | "muted";
+  /** Hide wordmark text on narrow viewports (header mobile bar) */
+  compact?: boolean;
   align?: "center" | "start";
   className?: string;
 };
 
 /**
- * Samskara Nutrition wordmark — House-style typography:
- * large serif “Samskara” with tracked “Nutrition” beneath in terracotta/gold.
+ * Samskara Nutrition wordmark — one brand name, one colour.
  */
 export function BrandWordmark({
   layout = "horizontal",
   markSize = 44,
   tone = "light",
   markTone,
-  subtitleTone,
+  compact = false,
   align = "center",
   className = "",
 }: Props) {
-  const iconTone =
-    markTone ?? (tone === "dark" ? "cream" : "forest");
-  const titleClass =
+  const iconTone = markTone ?? (tone === "dark" ? "cream" : "forest");
+  const nameClass =
     tone === "dark"
       ? "font-serif text-[color:var(--color-cream)]"
       : "font-serif text-[color:var(--color-forest)]";
-  const subtitleClass =
-    tone === "dark"
-      ? subtitleTone === "muted"
-        ? "text-[0.58rem] uppercase tracking-[0.34em] text-[color:color-mix(in_oklab,var(--color-cream)_48%,transparent)]"
-        : subtitleTone === "terracotta"
-          ? "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-terracotta)]"
-          : "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-gold)]"
-      : "text-[0.58rem] uppercase tracking-[0.34em] text-[color:var(--color-terracotta)]";
   const alignClass = align === "start" ? "items-start text-left" : "items-center text-center";
 
   if (layout === "stacked") {
     return (
       <div className={`flex flex-col ${alignClass} ${className}`}>
         <BrandMark size={markSize} tone={iconTone} />
-        <span className={`mt-3 text-2xl leading-none md:text-3xl ${titleClass}`}>Samskara</span>
-        <span className={`mt-2 ${subtitleClass}`}>Nutrition</span>
+        <span className={`brand-wordmark-name mt-3 ${nameClass}`}>
+          <span className="brand-wordmark-line">Samskara</span>
+          <span className="brand-wordmark-line">Nutrition</span>
+        </span>
       </div>
     );
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center gap-2.5 sm:gap-3 ${className}`}>
       <BrandMark size={markSize} tone={iconTone} className="shrink-0" />
-      <span className="flex flex-col leading-tight">
-        <span className={`text-xl md:text-2xl ${titleClass}`}>Samskara</span>
-        <span className={subtitleClass}>Nutrition</span>
+      <span
+        className={
+          "brand-wordmark-name brand-wordmark-name--horizontal whitespace-nowrap " +
+          nameClass +
+          (compact ? " brand-wordmark-name--compact" : "")
+        }
+      >
+        Samskara Nutrition
       </span>
     </div>
   );

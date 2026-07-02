@@ -17,7 +17,7 @@ export function ClosingCTA() {
           {t("closing.body")}
         </p>
         <Link
-          to="/work-with-me"
+          to="/programmes"
           hash="book"
           onClick={() => tap(8)}
           className="mt-8 inline-flex items-center justify-center bg-[color:var(--color-cream)] px-7 py-4 text-xs uppercase tracking-[0.18em] text-[color:var(--color-forest)] transition-colors hover:bg-[color:var(--color-terracotta)] hover:text-[color:var(--color-cream)]"

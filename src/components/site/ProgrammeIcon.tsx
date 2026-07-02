@@ -1,71 +1,72 @@
-import { BrandMark } from "@/components/site/BrandMark";
-
 export type ProgrammeIconVariant = "signature" | "clarity" | "bridge";
+
+export type ProgrammeIconTone = "forest" | "terracotta" | "cream" | "gold";
+
+export type ProgrammeIconContext = "overview" | "detail" | "home";
 
 type Props = {
   variant: ProgrammeIconVariant;
-  size?: number;
+  tone?: ProgrammeIconTone;
+  context?: ProgrammeIconContext;
+  onDark?: boolean;
   className?: string;
 };
 
-/** Brand-aligned programme marks — not generic Lucide stock icons */
-export function ProgrammeIcon({ variant, size = 20, className = "" }: Props) {
-  if (variant === "signature") {
-    return <BrandMark size={size} tone="forest" className={className} />;
-  }
+const ICON_SRC: Record<ProgrammeIconVariant, string> = {
+  clarity: "/images/icons/artha-lotus.png",
+  bridge: "/images/icons/setu-bridge.png",
+  signature: "/images/icon-base.png",
+};
 
-  const svgProps = {
-    width: size,
-    height: size,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg",
-    className,
-    "aria-hidden": true as const,
-  };
+const TONE_COLOR: Record<ProgrammeIconTone, string> = {
+  forest: "var(--color-forest)",
+  terracotta: "var(--color-terracotta)",
+  cream: "var(--color-cream)",
+  gold: "var(--color-gold)",
+};
 
-  if (variant === "clarity") {
-    return (
-      <svg {...svgProps}>
-        <path
-          d="M12 20.5c0-6.5-3.5-10-6.5-13.5C8.5 8 11 6.5 12 4.5c1 2 3.5 3.5 6.5 2.5-3 3.5-6.5 7-6.5 13.5Z"
-          stroke="currentColor"
-          strokeWidth="1.35"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M12 20.5V11"
-          stroke="currentColor"
-          strokeWidth="1.35"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
+export function programmeIconTone(_onDark: boolean, _variant: ProgrammeIconVariant): ProgrammeIconTone {
+  return "forest";
+}
+
+/** Outlined lotus / bridge / brand mark — sized via parent `.programme-icon-well` */
+export function ProgrammeIcon({
+  variant,
+  tone,
+  context = "overview",
+  onDark = false,
+  className = "",
+}: Props) {
+  const resolvedTone = tone ?? programmeIconTone(onDark, variant);
+  const src = ICON_SRC[variant];
 
   return (
-    <svg {...svgProps}>
-      <path
-        d="M4 16.5h16"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
+    <span
+      className={
+        "programme-icon-well" +
+        ` programme-icon-well--${context}` +
+        (onDark ? " is-on-dark" : "") +
+        (className ? " " + className : "")
+      }
+      data-variant={variant}
+    >
+      <span
+        aria-hidden="true"
+        className="programme-glyph"
+        style={{
+          backgroundColor: TONE_COLOR[resolvedTone],
+          WebkitMaskImage: `url(${src})`,
+          WebkitMaskSize: "contain",
+          WebkitMaskRepeat: "no-repeat",
+          WebkitMaskPosition: "center",
+          maskImage: `url(${src})`,
+          maskSize: "contain",
+          maskRepeat: "no-repeat",
+          maskPosition: "center",
+        }}
       />
-      <path
-        d="M7 16.5V11a5 5 0 0 1 10 0v5.5"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9 13h6"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-      />
-    </svg>
+    </span>
   );
 }
 
-export const PROGRAMME_ICON_ORDER: ProgrammeIconVariant[] = ["signature", "clarity", "bridge"];
+export const PROGRAMME_ICON_ORDER: ProgrammeIconVariant[] = ["clarity", "bridge", "signature"];

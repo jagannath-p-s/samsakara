@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { AboutSamskaraMeaning, DiscoveryCallCTA, MailingListBlock } from "@/components/site/AboutSections";
+import { AboutSamskaraMeaning, DiscoveryCallCTA } from "@/components/site/AboutSections";
 import { AboutStory } from "@/components/site/AboutStory";
 import { SiteLayout } from "@/components/site/Layout";
 import { BlurImage } from "@/components/site/BlurImage";
@@ -16,7 +16,7 @@ export const Route = createFileRoute("/about")({
       { property: "og:title", content: "About Samantha — Samskara Nutrition" },
       { property: "og:description", content: "The founder story of Samskara Nutrition — food as a language between you and your body." },
       { property: "og:url", content: absoluteUrl("/about") },
-      { property: "og:image", content: absoluteUrl(photos.portrait.src) },
+      { property: "og:image", content: absoluteUrl(photos.homeHero.src) },
     ],
     links: [{ rel: "canonical", href: absoluteUrl("/about") }],
   }),
@@ -49,14 +49,14 @@ function AboutPage() {
           <div className="order-1 lg:order-2 lg:col-span-5">
             <figure className="about-hero-portrait">
               <BlurImage
-                src={photos.portrait.src}
+                src={photos.aboutHero.src}
                 alt={t("about.imageCaptions.portrait")}
                 width={1400}
                 height={905}
                 loading="eager"
                 fetchPriority="high"
                 instant
-                objectPosition={photos.portrait.objectPosition}
+                objectPosition={photos.aboutHero.objectPosition}
               />
             </figure>
           </div>
@@ -66,7 +66,6 @@ function AboutPage() {
       <AboutStory />
 
       <AboutSamskaraMeaning />
-      <MailingListBlock />
       <DiscoveryCallCTA />
     </SiteLayout>
   );

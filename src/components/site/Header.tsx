@@ -16,8 +16,8 @@ export function Header() {
   const nav = [
     { to: "/", label: t("nav.home") },
     { to: "/about", label: t("nav.about") },
+    { to: "/approach", label: t("nav.approach") },
     { to: "/programmes", label: t("nav.programmes") },
-    { to: "/work-with-me", label: t("nav.work") },
     { to: "/contact", label: t("nav.contact") },
   ];
 
@@ -87,14 +87,9 @@ export function Header() {
 
   const mobileMenu =
     mounted && open ? (
-      <div
-        className="mobile-menu"
-        role="dialog"
-        aria-modal="true"
-        aria-label={t("nav.menu")}
-      >
+      <div className="mobile-menu" role="dialog" aria-modal="true" aria-label={t("nav.menu")}>
         <div className="mobile-menu-bar">
-          <BrandWordmark markSize={36} tone="dark" markTone="cream" subtitleTone="muted" />
+          <BrandWordmark markSize={36} tone="dark" markTone="cream" compact />
           <button
             type="button"
             className="menu-btn menu-btn-dark is-active"
@@ -151,7 +146,7 @@ export function Header() {
 
         <div className="mobile-menu-cta-wrap">
           <Link
-            to="/work-with-me"
+            to="/programmes"
             hash="book"
             preload="intent"
             onClick={() => {
@@ -173,23 +168,23 @@ export function Header() {
   return (
     <>
       <header className={"site-header" + (scrolled ? " is-scrolled" : "")}>
-        <div className="header-inner mx-auto flex max-w-6xl items-center justify-between px-6 py-5 lg:px-10">
-          <Link to="/" className="flex items-center" aria-label="Samskara Nutrition — Home">
-            <BrandWordmark markSize={scrolled ? 36 : 44} tone="light" />
+        <div className="header-inner">
+          <Link to="/" className="header-brand" aria-label="Samskara Nutrition Home">
+            <BrandWordmark markSize={scrolled ? 36 : 40} tone="light" compact />
           </Link>
 
-          <nav className="hidden lg:block" aria-label="Primary">
-            <div ref={navRef} className="nav-links relative flex items-center gap-8">
+          <nav className="header-nav" aria-label="Primary">
+            <div ref={navRef} className="nav-links">
               {nav.map((item) => (
                 <Link
                   key={item.to}
                   to={item.to}
                   preload="intent"
                   activeOptions={{ exact: item.to === "/" }}
-                  className="text-sm text-[color:var(--color-forest)] transition-colors hover:text-[color:var(--color-terracotta)]"
+                  className="header-nav-link"
                   activeProps={
                     {
-                      className: "text-[color:var(--color-terracotta)]",
+                      className: "header-nav-link is-active",
                       "data-active": "true",
                     } as any
                   }
@@ -217,13 +212,13 @@ export function Header() {
             </div>
           </nav>
 
-          <div className="hidden items-center gap-5 lg:flex">
+          <div className="header-actions">
             <LangToggle />
             <Link
-              to="/work-with-me"
+              to="/programmes"
               hash="book"
               preload="intent"
-              className="btn-primary text-xs"
+              className="btn-primary header-cta"
               onClick={() => tap(8)}
             >
               {t("nav.cta")} <span className="cta-arrow ml-2">→</span>
@@ -251,7 +246,7 @@ export function Header() {
         </div>
       </header>
 
-      <div aria-hidden className="h-[76px]" />
+      <div className="header-spacer" aria-hidden />
 
       {mounted && mobileMenu ? createPortal(mobileMenu, document.body) : null}
     </>

@@ -82,12 +82,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:url", content: SITE_URL },
       { property: "og:title", content: SITE_NAME },
       { property: "og:description", content: SITE_DESCRIPTION },
-      { property: "og:image", content: absoluteUrl(photos.portrait.src) },
+      { property: "og:image", content: absoluteUrl(photos.homeHero.src) },
       { property: "og:image:alt", content: "Samantha, founder of Samskara Nutrition" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: SITE_NAME },
       { name: "twitter:description", content: SITE_DESCRIPTION },
-      { name: "twitter:image", content: absoluteUrl(photos.portrait.src) },
+      { name: "twitter:image", content: absoluteUrl(photos.homeHero.src) },
     ],
     links: [
       { rel: "stylesheet", href: stylesheetHref() },
@@ -112,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: SITE_NAME,
           url: SITE_URL,
           description: SITE_DESCRIPTION,
-          image: absoluteUrl(photos.portrait.src),
+          image: absoluteUrl(photos.homeHero.src),
           areaServed: ["United Kingdom", "Europe"],
           email: "hello@samskaranutrition.com",
           address: {

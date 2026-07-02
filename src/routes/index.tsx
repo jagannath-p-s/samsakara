@@ -17,11 +17,11 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "Samskara Nutrition — Functional Nutrition for Gut Health" },
       { property: "og:description", content: "Functional nutrition rooted in food wisdom — for gut health and lasting wellbeing." },
       { property: "og:url", content: absoluteUrl("/") },
-      { property: "og:image", content: absoluteUrl(photos.portrait.src) },
+      { property: "og:image", content: absoluteUrl(photos.homeHero.src) },
     ],
     links: [
       { rel: "canonical", href: absoluteUrl("/") },
-      { rel: "preload", href: photos.portrait.src, as: "image", fetchPriority: "high" },
+      { rel: "preload", href: photos.homeHero.src, as: "image", fetchPriority: "high" },
     ],
   }),
   component: HomePage,
@@ -45,7 +45,7 @@ function HomePage() {
             <div className="mt-7 h-px w-12 bg-[color:var(--color-gold)]/50" aria-hidden />
             <p className="mt-5 max-w-xl text-body text-lg font-medium sm:text-xl">{home.body}</p>
             <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-              <Link to="/work-with-me" hash="book" preload="intent" onClick={() => tap(8)} className="btn-primary">
+              <Link to="/programmes" hash="book" preload="intent" onClick={() => tap(8)} className="btn-primary">
                 {t("nav.cta")} <span className="cta-arrow ml-2">→</span>
               </Link>
               <Link to="/programmes" preload="intent" className="btn-outline">{home.explore}</Link>
@@ -54,33 +54,21 @@ function HomePage() {
           <div className="lg:col-span-5">
             <div className="hero-portrait">
               <BlurImage
-                src={photos.portrait.src}
+                src={photos.homeHero.src}
                 alt={home.portraitAlt}
                 width={1024}
-                height={1024}
+                height={1280}
                 loading="eager"
                 fetchPriority="high"
                 instant
+                objectPosition={photos.homeHero.objectPosition}
               />
             </div>
           </div>
         </div>
 
-        <div className="hero-unified-quote mx-auto max-w-6xl px-5 pb-12 sm:px-6 sm:pb-16 lg:px-10 lg:pb-20">
-          <div className="hero-quote-split">
-            <div className="hero-quote-art" aria-hidden>
-              <img
-                src="/images/quote-wellness.png"
-                alt=""
-                width={565}
-                height={612}
-                loading="lazy"
-                decoding="async"
-                className="hero-quote-illustration"
-              />
-            </div>
-            <blockquote className="hero-quote-text">{home.quote}</blockquote>
-          </div>
+        <div className="hero-unified-quote mx-auto max-w-3xl px-5 pb-12 text-center sm:px-6 sm:pb-16 lg:px-10 lg:pb-20">
+          <blockquote className="hero-quote-text hero-quote-text--solo">{home.quote}</blockquote>
         </div>
       </section>
 
@@ -132,9 +120,7 @@ function HomePage() {
               return (
                 <Link key={p.name} to="/programmes" data-reveal-child
                   className="group relative flex flex-col gap-4 bg-background p-7 transition-colors hover:bg-[color:var(--color-cream-deep)] sm:p-10">
-                  <span aria-hidden className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--color-terracotta)]/40 bg-[color:var(--color-cream-deep)] text-[color:var(--color-terracotta)] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:rotate-3">
-                    <ProgrammeIcon variant={iconVariant} size={20} />
-                  </span>
+                  <ProgrammeIcon variant={iconVariant} context="home" />
                   <span className="eyebrow">{p.tag}</span>
                   <h3 className="font-serif text-2xl text-[color:var(--color-forest)]">{p.name}</h3>
                   <p className="text-body text-[0.98rem]">{p.body}</p>

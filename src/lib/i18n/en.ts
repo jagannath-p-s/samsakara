@@ -1,6 +1,9 @@
 /* eslint-disable */
+import { approachEn } from "./approach-en";
 import { faqEn } from "./faq-en";
 import { legalEn } from "./legal-en";
+import { programmesEn } from "./programmes-en";
+import type { ApproachPageContent, ProgrammesPageContent } from "./programmes-types";
 import type { FaqTranslations } from "./faq-types";
 import type { LegalTranslations } from "./legal-types";
 
@@ -16,7 +19,7 @@ type StoryChapter = {
 };
 
 export type Translations = {
-  nav: { home: string; about: string; programmes: string; work: string; contact: string; faq: string; email: string; cta: string; menu: string; close: string; language: string };
+  nav: { home: string; about: string; approach: string; programmes: string; work: string; contact: string; faq: string; email: string; cta: string; menu: string; close: string; language: string };
   footer: {
     tagline: string;
     serving: string;
@@ -48,21 +51,10 @@ export type Translations = {
       tagline: string;
       imageAlt: string;
     };
-    mailing: {
-      title: string;
-      body: string;
-      emailLabel: string;
-      submit: string;
-      submitting: string;
-      successTitle: string;
-      successBody: string;
-      privacyPrefix: string;
-      privacyLink: string;
-      privacySuffix: string;
-      errorBody: string;
-    };
     discoveryCta: { eyebrow: string; title: string; body: string; cta: string };
   };
+  programmesPage: ProgrammesPageContent;
+  approach: ApproachPageContent;
   programmes: { eyebrow: string; title: string; intro: string; cta: string; items: ProgFull[] };
   work: {
     eyebrow: string; title: string; intro: string; steps: Step[];
@@ -99,12 +91,13 @@ export const en: Translations = {
   nav: {
     home: "Home",
     about: "About Me",
-    programmes: "Programmes",
+    approach: "The Approach",
+    programmes: "Work With Me",
     work: "Work With Me",
     contact: "Contact",
     faq: "FAQ",
     email: "Email",
-    cta: "Book a Free Discovery Call",
+    cta: "Find the Right Path",
     menu: "Menu",
     close: "Close",
     language: "Language",
@@ -114,17 +107,17 @@ export const en: Translations = {
     serving: "Working with clients across the UK and Europe, online and in London.",
     explore: "Explore",
     contactLabel: "Contact",
-    onlineNote: "Online across the UK & Europe · London clinic",
+    onlineNote: "Online across the UK & Europe",
     copyright: "© 2026 Samskara Nutrition · Made with care",
     clinicHeading: "Our London clinic",
-    clinicHint: "In-person consultations by appointment",
+    clinicHint: "",
     clinicDirections: "Open in Google Maps",
   },
   closing: {
     eyebrow: "A first conversation",
     title: "Struggling to make decisions or trust yourself?",
     body: "Your gut may have lost its voice. I help restore the connection between gut and mind, so clarity returns, energy steadies, and you feel aligned again.",
-    cta: "Book a Free Discovery Call",
+    cta: "Find the Right Path",
   },
   home: {
     eyebrow: "Where traditional food wisdom meets modern science",
@@ -147,9 +140,9 @@ export const en: Translations = {
     seeAll: "See all programmes",
     learnMore: "Learn more",
     programmes: [
-      { name: "Samskara — My Signature Journey", tag: "Signature · 10 weeks", body: "A deeper, more personal path to lasting change. Comprehensive support over ten weeks for those ready to truly transform how they feel." },
-      { name: "Clarity — Lasting Impressions", tag: "Your first step", body: "A focused first step for those seeking clarity, guidance, and a deeper understanding of what their body needs — without committing to a longer journey just yet." },
-      { name: "Setu — The Bridge", tag: "The bridge", body: "Structured, hands-on support to help you build on your initial plan, restore balance, and bridge the gap between insight and lasting progress." },
+      { name: "Artha", tag: "Clarity", body: "A focused first step to understand what your body has been trying to tell you, with your personalised Samskara Blueprint™." },
+      { name: "Setu", tag: "Connection", body: "A bridge between insight and everyday life. Four weeks of guidance as your Blueprint evolves with your body." },
+      { name: "Samskara", tag: "Lasting Imprints · 10 weeks", body: "Our signature ten-week transformation for those ready to move beyond restriction and restore digestive balance from within." },
     ],
     portraitAlt: "Portrait of Samantha, founder of Samskara Nutrition",
   },
@@ -220,26 +213,15 @@ export const en: Translations = {
       tagline: "To nourish with intention.",
       imageAlt: "Mediterranean table — food traditions at the heart of Samskara",
     },
-    mailing: {
-      title: "Every choice leaves its mark.",
-      body: "Choose to feel aligned through the Samskara journey. Join our mailing list for grounded support on health, seasonal rhythms and recipes, and updates from the practice.",
-      emailLabel: "Your email",
-      submit: "Join the mailing list",
-      submitting: "Joining…",
-      successTitle: "You're on the list.",
-      successBody: "Thank you — look out for grounded support, seasonal rhythms and updates from the practice.",
-      privacyPrefix: "I agree to the ",
-      privacyLink: "Privacy Policy",
-      privacySuffix: " and consent to Samskara Nutrition storing my email for mailing list updates.",
-      errorBody: "Something went wrong — please email hello@samskaranutrition.com to join.",
-    },
     discoveryCta: {
-      eyebrow: "The first step",
-      title: "Book a free discovery call",
-      body: "A relaxed, fifteen-minute conversation to explore where you are, what you're hoping for, and whether we're the right fit.",
-      cta: "Book a Free Discovery Call",
+      eyebrow: "Find the right path",
+      title: "Your first conversation",
+      body: "A complimentary 15-minute discovery call — no obligation, just a thoughtful conversation about your health and where you'd like it to go.",
+      cta: "Find the Right Path",
     },
   },
+  programmesPage: programmesEn,
+  approach: approachEn,
   programmes: {
     eyebrow: "Ways to work together",
     title: "Choose your journey",
@@ -310,15 +292,15 @@ export const en: Translations = {
   clinic: {
     mapTitle: "Map showing Samskara Nutrition at 34a Thomas Rd, London",
     directions: "Open in Google Maps",
-    visitHeading: "Visit us in London",
+    visitHeading: "Find us in London",
   },
   payments: {
     eyebrow: "Booking & payment",
     title: "Reserve your place securely",
-    body: "Discovery calls are free. When you're ready to begin a programme, payment is collected securely at booking — no separate invoices or manual transfers.",
-    calendlyNote: "Timings and availability always come from Calendly, so the site stays up to date automatically.",
-    bookCta: "Book a free discovery call",
-    payCta: "Pay for a programme",
-    secureNote: "Payments processed securely via Stripe through Calendly or your payment link.",
+    body: "Discovery calls are complimentary. When you are ready to begin, choose your programme above and book directly through Calendly. Payment is collected securely at booking.",
+    calendlyNote: "",
+    bookCta: "Book a discovery call",
+    payCta: "Reserve a programme",
+    secureNote: "Payments processed securely via Calendly.",
   },
 } as const;
